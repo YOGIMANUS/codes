@@ -1,0 +1,631 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////cg///////////////////////////
+1.scanfill
+
+#include <iostream>
+using namespace std;
+class complex
+{
+    int x, y;
+public:
+    complex()
+    {
+        x = 0;
+        y = 0;
+    }
+    friend void operator>>(complex &u, complex &v)
+    {
+        cout << "Enter real part of 1st imaginary no (x1) : ";
+        cin >> u.x;
+        cout << "Enter imaginary part of 1st imaginary no (y1) : ";
+        cin >> u.y;
+        cout << "\nEnter real part of 1st imaginary no (x2) : ";
+        cin >> v.x;
+        cout << "Enter imaginary part of 1st imaginary no (y2) : ";
+        cin >> v.y;
+    }
+    friend void operator<<(complex &u, complex &v)
+    {
+        cout << "\n\n1st complex no is : " << u.x << " + " << u.y << "i";
+        cout << "\n2nd complex no is : " << v.x << " + " << v.y << "i";
+    }
+    friend void operator+(complex &u, complex &v)
+    {
+        complex add;
+        add.x = u.x + v.x;
+        add.y = u.y + v.y;
+        if (add.y > 0)
+        {
+            cout << "Addition of two complex numbers:"
+                 << "(" << add.x << "+" << add.y << "i)";
+        }
+        else
+        {
+            cout << "Addition of two complex numbers:"
+                 << "(" << add.x << "+" << (-1) * add.y << "i)";
+        }
+    }
+    friend void operator*(complex &u, complex &v)
+    {
+        complex multiply;
+        multiply.x = (u.x * v.x) - (u.y * v.y);
+        multiply.y = (u.x * v.y) + (u.y * v.x);
+        if (multiply.y > 0)
+        {
+            cout << "Multiplication of two complex numbers:"
+                 << "(" << multiply.x << "+" << multiply.y << "i)";
+        }
+        else
+        {
+            cout << "Multiplication of two complex numbers:"
+                 << "(" << multiply.x << "+" << (-1) * multiply.y << "i)";
+        }
+    }
+};
+int main()
+{
+    complex a, b;
+    operator>>(a, b);
+    operator<<(a, b);
+    char ch;
+    char des;
+    do
+    {
+        cout << endl
+             << "\nPress '+' for addition and '*' for multiplication: ";
+        cin >> ch;
+        switch (ch)
+        {
+        case '+':
+            a + b;
+            break;
+        case '*':
+            a *b;
+            break;
+        default:
+            cout << "Invalid choice\n";
+        }
+        cout << "\n\nDo you want to continue?(Y/N)";
+        cin >> des;
+
+    } while (des == 'y' || des == 'Y');
+    return 0;
+}
+
+//////////2.cohen/////////////
+
+
+#include<iostream.>
+#include<conio.h>
+#include<graphics.h>
+#include<math.h>
+using namespace std;
+void Window()
+{
+	line (200,200,350,200);
+	line(350,200,350,350);
+	line(200,200,200,350);
+	line(200,350,350,350);
+}
+void Code(char c[4],float x,float y)
+{        c[0]=(x<200)?'1':'0';
+	 c[1]=(x>350)?'1':'0';
+	 c[2]=(y<200)?'1':'0';
+	 c[3]=(y>350)?'1':'0';
+}
+void Clipping  (char c[],char d[],float &x,float &y,float m)
+{
+	int flag=1,i=0;
+	for (i=0;i<4;i++)
+	{
+		if(c[i]!='0' && d[i]!='0')
+		{
+			flag=0;
+			break;
+		}
+		if(flag)
+		{
+			if(c[0]!='0')
+			{
+				y=m*(200-x)+y;
+				x=200;
+			}
+			else if(c[1]!='0')
+			{
+				y=m*(350-x)+y;
+				x=350;
+			}
+			else if(c[2]!='0')
+			{
+				x=((200-y)/m)+x;
+				y=200;
+			}
+			else if(c[3]!='0')
+			{
+				x=((350-y)/m)+x;
+				y=350;
+			}
+		}
+		if (flag==0)
+			cout<<"Line lying outside";
+	}
+}
+void main()
+{
+int gd = DETECT, gm;
+initgraph(&gd, &gm, "");
+
+float x1,y1,x2,y2;
+float m;
+char c[4],d[4];
+cleardevice();
+cout<<"Enter coordinates";
+cin>>x1>>y1>>x2>>y2;
+cout<<"Before clipping";
+Window();
+line(x1,y1,x2,y2);
+getch();
+cleardevice();
+m=float((y2-y1)/(x2-x1));
+Code(c,x1,y1);
+Code(d,x2,y2) ;
+Clipping(c,d,x1,y1,m);
+Clipping(d,c,x2,y2,m);
+cout<<"After Clipping";
+Window();
+line(x1,y1,x2,y2);
+getch();
+closegraph();
+}
+
+
+//////////3.pattrn///////////
+
+#include<iostream>
+#include<graphics.h>
+#include<stdio.h>
+using namespace std;
+void ddaAlg(int x1,int y1,int x2,int y2)
+{
+int dx=x2-x1;
+int dy=y2-y1;
+int steps=dx>dy?dx:dy;
+float xInc=dx/(float)steps;
+float yInc=dy/(float)steps;
+float x=x1;
+float y=y1;
+for(int i=0;i<=steps;i++)
+{
+putpixel(x,y,14);
+x+=xInc;
+y+=yInc;
+}
+}
+void display(int xc,int yc,int x,int y)
+{
+putpixel(xc+x, yc+y, 3);
+putpixel(xc-x, yc+y, 3);
+putpixel(xc+x, yc-y, 3);
+putpixel(xc-x, yc-y, 3);
+putpixel(xc+y, yc+x, 3);
+putpixel(xc-y, yc+x, 3);
+putpixel(xc+y, yc-x, 3);
+putpixel(xc-y, yc-x, 3);
+}
+
+void CircleB(int x1,int y1,int r)
+{
+int x=0,y=r;
+int d=3-2*r;
+display(x1,y1,x,y);
+while(y>=x)
+{
+x++;
+if(d>0)
+{
+y--;
+d=d+4*(x-y)+10;
+}
+else
+{
+d=d+4*x+6;
+}
+display(x1,y1,x,y);
+}
+}
+int main()
+{
+int gd=DETECT, gm;
+initgraph(&gd,&gm,"");
+CircleB(150,180,57);
+CircleB(150,180,57/2);
+ddaAlg(102,150,198,150);
+ddaAlg(102,150,150,236);
+ddaAlg(150,236,198,150);
+getch();
+closegraph();
+return 0;
+}
+
+//////////////////4.ddaline///////////////
+
+#include <iostream>
+#include <graphics.h>
+#include<algorithm>
+#include<math.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm,"");
+
+    float x1, y1, x2, y2;
+
+    
+    cout << "Enter the coordinates of the first point (x1 y1): ";
+    cin >> x1 >> y1;
+    cout << "Enter the coordinates of the second point (x2 y2): ";
+    cin >> x2 >> y2;
+
+    float dx = x2 - x1;
+    float dy = y2 - y1;
+
+    float steps = max(abs(dx),abs(dy));
+
+    float xIncrement = dx / steps;
+    float yIncrement = dy / steps;
+
+    float x = x1;
+    float y = y1;
+
+ 
+    for (int i = 1; i <= steps; i++) {
+        putpixel(round(x), round(y), WHITE);
+        x += xIncrement;
+        y += yIncrement;
+        
+    }
+
+    delay(5000);
+    closegraph();
+
+    return 0;
+}
+
+
+////////////////////////5.bresenhem line///////////////
+
+#include <iostream>
+#include <graphics.h>
+#include<algorithm>
+#include<math.h>
+using namespace std;
+
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm,"");
+
+    int x1, y1, x2, y2;
+
+    
+    cout << "Enter the coordinates of the first point (x1 y1): ";
+    cin >> x1 >> y1;
+    cout << "Enter the coordinates of the second point (x2 y2): ";
+    cin >> x2 >> y2;
+
+    int dx = abs(x2 - x1);
+    int dy = abs(y2 - y1);
+    int slope_error=2*dy-dx;
+    int x = x1;
+    int y = y1;
+    while(x<=x2){
+      putpixel(x,y,WHITE);
+      delay(50);
+      x++;
+      if(slope_error>=0){
+         y++;
+         slope_error-=2*dx;
+      }else{
+         slope_error+=2*dy;
+      }
+    }
+     
+
+    
+    closegraph();
+
+    return 0;
+}
+
+/////////////////6.2tranformation////////////////
+
+#include<iostream>
+#include<graphics.h>
+#include<math.h>
+using namespace std;
+
+void drawrectangle(int x1,int y1,int x2,int y2){
+	rectangle(x1,y1,x2,y2);
+}
+
+
+int main(){
+	int gd=DETECT,gm;
+	initgraph(&gd,&gm,"");
+	int x1,y1,x2,y2;
+	char ch;
+	cout<<"enter x1,y1,x2,y2";
+	cin>>x1>>y1>>x2>>y2;
+	drawrectangle(x1,y1,x2,y2);
+	cout<<"\n Type : \n 1 for translation \n 2 for scaling \n 3 for roatation";
+	cin>>ch;
+	switch(ch){
+		case '1':
+			int tx, ty;
+			cout<<"enter translating factors tx and ty";
+			cin>>tx>>ty;
+			
+			drawrectangle(x1,y1,x2+tx,y2+ty);
+			break;
+		case '2':
+			float sx,sy;
+			cout<<"enter scaling factor sx and sy";
+			cin>>sx>>sy;
+			
+			drawrectangle(x1,y1,x2*sx,y2*sy);
+			break;
+
+		case '3':
+			float angle;
+			cout<<"enter angle in degrees";
+			cin>>angle;
+			float radian=angle*3.14159/180.0;
+			drawrectangle(x1,y1,(x2*cos(radian)-y2*sin(radian)),(x2*sin(radian)-y2*cos(radian)));
+			break;
+	} 
+
+	
+	getch();
+	closegraph();
+
+}
+
+////////////////////7.midpoint/////////////////
+
+#include<iostream>
+#include<graphics.h>
+using namespace std;
+
+void drawcircle(int xc,int yc,int radius){
+	int x=radius , y=0;
+	int error=1-x;
+	while (x>=y){
+		putpixel(xc+x,yc+y,WHITE);
+		putpixel(xc+x,yc-y,WHITE);
+		putpixel(xc-x,yc+y,WHITE);
+		putpixel(xc-x,yc-y,WHITE);
+		putpixel(xc+y,yc+x,WHITE);
+		putpixel(xc+y,yc-x,WHITE);
+		putpixel(xc-y,yc+x,WHITE);
+		putpixel(xc-y,yc-x,WHITE);
+		y++;
+		if(error<0){
+			error+=2*y+1;
+			
+		}else{
+			x--;
+			error+=2*(y-x)+1;
+		}
+		
+	}
+}
+int main(){
+	int gd=DETECT , gm;
+	initgraph(&gd,&gm,"");
+	int xc=300,yc=300,radius=100;
+	drawcircle(xc,yc,radius);
+	delay(5000);
+	closegraph();
+	return 0;
+	
+}
+
